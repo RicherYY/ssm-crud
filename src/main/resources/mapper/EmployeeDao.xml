@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbkj.dao.EmployeeDao">
+
+  <resultMap id="employeeDepartment" type="com.mbkj.entity.Employee">
+    <result property="empId" column="emp_id"/>
+    <result property="empName" column="emp_name"/>
+    <result property="gender" column="gender"/>
+    <result property="email" column="email"/>
+    <!--<association property="department" javaType="Department">
+      <result property="deptId" column="dept_id"/>
+      <result property="deptName" column="dept_name"/>
+    </association>-->
+    <result column="dept_id" property="department.deptId"/>
+    <result column="dept_name" property="department.deptName"/>
+  </resultMap>
+
+  <!--从数据库中查询出所有的User对象-->
+  <select id="selectAll" resultType="com.mbkj.entity.Employee" resultMap="employeeDepartment">
+    SELECT
+        te.emp_id,
+        te.emp_name,
+        te.gender,
+        te.email,
+        td.dept_Name
+    FROM
+        tb_emp AS te
+        INNER JOIN tb_dept AS td ON te.dept_id = td.dept_id
+    ORDER BY te.emp_id
+    </select>
+
+
+  <select id="selectOneByEmpId" parameterType="int" resultType="com.mbkj.entity.Employee" resultMap="employeeDepartment">
+    SELECT
+        te.emp_id,
+        te.emp_name,
+        te.gender,
+        te.email,
+        td.dept_id,
+        td.dept_name
+    FROM
+        tb_emp AS te
+        INNER JOIN tb_dept AS td ON te.dept_id = td.dept_id
+    where te.emp_id = #{empId}
+  </select>
+
+  <insert id="addEmployee" parameterType="com.mbkj.entity.Employee">
+    INSERT INTO tb_emp (emp_name, gender, email, dept_id)
+     values (#{empName},#{gender},#{email},#{departId})
+  </insert>
+
+  <update id="updateEmpById" parameterType="com.mbkj.entity.Employee">
+    update
+        tb_emp
+    set
+        emp_name = #{empName},gender = #{gender},email = #{email},dept_id = #{departId}
+    where
+        emp_id = #{empId}
+  </update>
+
+  <delete id="deleteEmpById" parameterType="int">
+    delete from tb_emp where emp_id = #{empId}
+  </delete>
+
+
+
+
+</mapper>

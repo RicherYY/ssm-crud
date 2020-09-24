@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mbkj.dao.DepartmentDao">
+
+  <!--从数据库中查询出所有的User对象-->
+  <select id="selectAll" resultType="com.mbkj.entity.Department">
+        select * from tb_dept
+    </select>
+
+</mapper>
