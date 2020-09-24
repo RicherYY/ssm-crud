@@ -38,4 +38,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public int deleteEmpById(int empId) {
         return employeeDao.deleteEmpById(empId);
     }
+
+    @Override
+    public void deleteEmpAll(String[] delEmpIds) {
+        for (String delEmpId : delEmpIds) {
+            employeeDao.deleteEmpById(Integer.parseInt(delEmpId));
+        }
+    }
 }

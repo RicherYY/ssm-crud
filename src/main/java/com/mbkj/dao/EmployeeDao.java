@@ -49,4 +49,5 @@ public interface EmployeeDao {
 
     int deleteEmpById(int empId);
 
+    void deleteEmpAll(int delEmpId);
 }

@@ -16,4 +16,5 @@ public interface EmployeeService {
 
     int deleteEmpById(int empId);
 
+    void deleteEmpAll(String[] delEmpIds);
 }

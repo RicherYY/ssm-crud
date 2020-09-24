@@ -3,8 +3,8 @@ $(function () {
     /**
      * 公共部分设置
      */
-    var totalPage;
-    var currentPage;
+    var totalPage   //末页;
+    var currentPage //当前页 ;
 
     show_page(1);
 
@@ -17,10 +17,10 @@ $(function () {
 
         $.ajax({
             url: "/emps/getAll",
-            data:"pageStart="+pageStart,
+            data: "pageStart=" + pageStart,
             type: "GET",
             dataType: "json",
-            contentType:"application/json;charset=UTF-8",
+            contentType: "application/json;charset=UTF-8",
             success: function (result) {
                 //1.解析并显示员工数据表
                 build_page_table(result);
@@ -36,7 +36,7 @@ $(function () {
      * 解析员工数据表
      * @param result
      */
-    function build_page_table(result){
+    function build_page_table(result) {
         //清空table表格
         $("#emps_table tbody").empty();
         var emps = result.data.list;
@@ -44,7 +44,7 @@ $(function () {
         //遍历元素
         //jQuery提供的each函数,
         $.each(emps, function (index, item) {
-            var checkBox=$("<td><input type='checkbox' class='check_item'/></td>");
+            var checkBox = $("<td><input type='checkbox' class='check_item'/></td>");
             var empId = $("<td></td>").append(item.empId);
             var empName = $("<td></td>").append(item.empName);
             var gender = $("<td></td>").append(item.gender);
@@ -52,18 +52,14 @@ $(function () {
             var deptName = $("<td></td>").append(item.department.deptName);
 
             //修改按钮
-            var edit_btn = $("<button></button>").addClass("btn btn-primary btn-sm edit_btn").
-            append($("<span></span>").addClass("glyphicon glyphicon-pencil").
-            attr("aria-hidden", true)).append("编辑");
+            var edit_btn = $("<button></button>").addClass("btn btn-primary btn-sm edit_btn").append($("<span></span>").addClass("glyphicon glyphicon-pencil").attr("aria-hidden", true)).append("编辑");
 
             //删除按钮
-            var delete_btn = $("<button></button>").addClass("tn btn-danger btn-sm delete_btn").
-            append($("<span></span>").addClass("glyphicon glyphicon-trash").
-            attr("aria-hidden", true)).append("删除");
+            var delete_btn = $("<button></button>").addClass("tn btn-danger btn-sm delete_btn").append($("<span></span>").addClass("glyphicon glyphicon-trash").attr("aria-hidden", true)).append("删除");
 
             var td_btn = $("<td></td>").append(edit_btn).append(" ").append(delete_btn);
             $("<tr></tr>").append(checkBox).append(empId).append(empName).append(gender).append(email).append(deptName)
-                .append(td_btn ).appendTo("#emps_table tbody");
+                .append(td_btn).appendTo("#emps_table tbody");
         });
     }
 
@@ -76,14 +72,14 @@ $(function () {
         $("#page_info").append("当前" + result.data.pageNum + "页,总共" + result.data.pages +
             "页，总共" + result.data.total + "条记录");
         totalPage = result.data.total;
-        currentPage=result.data.pageNum;
+        currentPage = result.data.pageNum;
     }
 
     /**
      * 解析并显示分页条数据
      * @param result
      */
-    function build_page_nav(result){
+    function build_page_nav(result) {
         $("#page_nav").empty();
         var ul = $("<ul></ul>").addClass("pagination");
         var firstPageLi = $("<li></li>").append($("<a></a>").append("首页").attr("href", "#"));
@@ -144,7 +140,7 @@ $(function () {
      */
     $("#emp_Add_modal_Btn").click(function () {
         //在弹出模态框之前需要获取部门信息
-         getDepts("#departId");
+        getDepts("#departId");
 
         //清空模态框中的数据
         $("#myModal form")[0].reset();
@@ -153,7 +149,7 @@ $(function () {
         $("#myModal form").find(".help-block").text("提示信息");
 
         $('#myModal').modal({
-            backdrop : 'static'
+            backdrop: 'static'
         });
     });
 
@@ -164,15 +160,15 @@ $(function () {
 
     function getDepts(ele) {
         $.ajax({
-            url : "/depts",
-            type : 'GET',
+            url: "/depts",
+            type: 'GET',
             dataType: "json",
-            success:function (result) {
+            success: function (result) {
                 //接收到后台传过来的部门信息之后,遍历, 清空并填充ele
                 $(ele).empty();
-                $.each(result.data,function (index, dept) {
+                $.each(result.data, function (index, dept) {
                     $(ele).append(
-                        $("<option></option>").append(dept.deptName).attr("value",dept.deptId)
+                        $("<option></option>").append(dept.deptName).attr("value", dept.deptId)
                     );
                 });
             }
@@ -184,9 +180,9 @@ $(function () {
      */
     $("#emp_save_button").click(function () {
         var empName = $("#empName_form_input").val();
-        var gender =$("input[name=gender]:checked").val();
-        var email =$("#email_form_input").val();
-        var deptId =$("#departId option:selected").val();
+        var gender = $("input[name=gender]:checked").val();
+        var email = $("#email_form_input").val();
+        var deptId = $("#departId option:selected").val();
 
         //2.3.1 发送ajax请求保存用户
         $.ajax({
@@ -194,15 +190,15 @@ $(function () {
             type: "POST",
             data: JSON.stringify(
                 {
-                    empName:empName,
-                    gender:gender,
-                    email:email,
-                    departId:deptId
+                    empName: empName,
+                    gender: gender,
+                    email: email,
+                    departId: deptId
                 }),
-            dataType:"json",
-            contentType:"application/json;charset=UTF-8",
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
             success: function (result) {
-                if (result.status == 0){
+                if (result.status == 0) {
                     //1.关闭modal框
                     $("#myModal").modal('hide');
                     //2.来到最后一页，显示刚才保存的数据
@@ -218,7 +214,7 @@ $(function () {
      */
     $(document).on("click", ".edit_btn", function () {
         //var empId = $(this).attr("empId");
-        var empId= $(this).parent().parent().children("td").eq(1).text();
+        var empId = $(this).parent().parent().children("td").eq(1).text();
 
         //在弹出模态框之前需要获取部门信息
         getDepts("#departId_update");
@@ -228,18 +224,18 @@ $(function () {
 
         //弹出修改modal
         $('#editModal').modal({
-            backdrop : 'static'
+            backdrop: 'static'
         });
     })
 
     //回显
     function getEmp(empId) {
         $.ajax({
-            url : "/emps/"+empId,
+            url: "/emps/" + empId,
             type: "GET",
             dataType: "json",
-            contentType:"application/json;charset=UTF-8",
-            success : function (result) {
+            contentType: "application/json;charset=UTF-8",
+            success: function (result) {
                 $("#empId_update").val(result.data.empId);
                 $("#empName_update").val(result.data.empName);
                 $("#email_form_input_update").val(result.data.email);
@@ -264,16 +260,16 @@ $(function () {
             type: "POST",
             data: JSON.stringify(
                 {
-                    empId:empId,
-                    empName:empName,
-                    gender:gender,
-                    email:email,
-                    departId:deptId
+                    empId: empId,
+                    empName: empName,
+                    gender: gender,
+                    email: email,
+                    departId: deptId
                 }),
-            dataType:"json",
-            contentType:"application/json;charset=UTF-8",
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
             success: function (result) {
-                if (result.status == 0){
+                if (result.status == 0) {
                     //1.关闭modal框
                     $("#editModal").modal('hide');
                     //2.来到最后一页，显示刚才保存的数据
@@ -291,16 +287,16 @@ $(function () {
 
 
         $('#delete_modal').modal({
-            backdrop : 'static'
+            backdrop: 'static'
         });
 
         $("#delete_confirm").click(function () {
 
             $.ajax({
-                url : "/emps/delete/"+empId,
-                type : "GET",
-                dataType : "json",
-                success : function (result) {
+                url: "/emps/delete/" + empId,
+                type: "GET",
+                dataType: "json",
+                success: function (result) {
                     if (result) {
                         $('#delete_modal').modal('hide');
                         show_page(currentPage);
@@ -313,6 +309,7 @@ $(function () {
     });
 
 
+    //*****************************4.批量删除******************************
     //checkbox 表单表头的选择框
     $("#check_all_page").click(function () {
         //根据 check_all_page 的是否被选中,来设置表单中的check_item的选中状态
@@ -320,10 +317,10 @@ $(function () {
     });
 
     //设置check_item的点击事件, 来给check_all_page赋值
-    $(document).on("click",".check_item", function () {
+    $(document).on("click", ".check_item", function () {
         //如果表格中的checkbox都被选中了, 那么表头的checkbox也被选中
         var flag = $(".check_item:checked").length == $(".check_item").length;
-        $("#check_all_page").prop("checked",flag);
+        $("#check_all_page").prop("checked", flag);
     });
 
     //大删除按钮 删除被选中的人员
@@ -334,24 +331,36 @@ $(function () {
         }
 
         //循环遍历每个被选择的checkBox的值
-        var select_name = "", select_id = "";
-        $.each($(".check_item:checked"),function () {
-            select_name += $(this).parents("tr").find("td:eq(2)").text() + " , ";
-            select_id += $(this).parents("tr").find("td:eq(1)").text() + "-";
+        var select_id = [];
+        $.each($(".check_item:checked"), function () {
+            select_id.push($(this).parents("tr").find("td:eq(1)").text());
         });
-        console.log(select_id);
 
-        if (select_name.length > 3)
-            select_name = select_name.substring(0, select_name.length - 3);
-        if (select_id.length > 1)
-            select_id = select_id.substring(0, select_id.length - 1);
 
-        /* 路径/emp/{"1-3-4-5"} : DELETE 删除员工id为 1 3 4 5 的员工
-        *  返回 true 或 false
-        * */
-        if (confirm("确定要删除" + select_name + "吗?")) {
-            //执行删除操作
-            console.log(select_id);
+        if (select_id.length >= 1) {
+
+            $('#delete_modal').modal({
+                backdrop: 'static'
+            });
+
+            $("#delete_confirm").click(function () {
+                //执行删除操作
+                $.ajax({
+                    url: "/emps/delCheck",
+                    data: JSON.stringify(select_id),
+                    type: "POST",
+                    contentType: "application/json",
+                    dataType: "json",
+                    success: function (result) {
+                        if (result) {
+                            $('#delete_modal').modal('hide');
+                            show_page(currentPage);
+                        } else {
+                            alert("删除中出现了一些错误");
+                        }
+                    }
+                })
+            });
         }
 
     });
