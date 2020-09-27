@@ -354,6 +354,7 @@ $(function () {
                     success: function (result) {
                         if (result) {
                             $('#delete_modal').modal('hide');
+                            $("#check_all_page").prop("checked",false);
                             show_page(currentPage);
                         } else {
                             alert("删除中出现了一些错误");
