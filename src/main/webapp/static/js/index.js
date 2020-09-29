@@ -4,9 +4,10 @@ $(function () {
      * 公共部分设置
      */
     var totalPage   //末页;
-    var currentPage //当前页 ;
+    var currentPage //当前页;
 
     show_page(1);
+
 
     //****************************1.首页展示部分********************************
     /**
@@ -71,7 +72,7 @@ $(function () {
         $("#page_info").empty();
         $("#page_info").append("当前" + result.data.pageNum + "页,总共" + result.data.pages +
             "页，总共" + result.data.total + "条记录");
-        totalPage = result.data.total;
+        totalPage = result.data.pages;
         currentPage = result.data.pageNum;
     }
 
@@ -148,9 +149,11 @@ $(function () {
         $("#myModal form").find("*").removeClass("has-error has-success");
         $("#myModal form").find(".help-block").text("提示信息");
 
+        //打开模态框
         $('#myModal').modal({
             backdrop: 'static'
         });
+
     });
 
 
@@ -186,7 +189,7 @@ $(function () {
 
         //2.3.1 发送ajax请求保存用户
         $.ajax({
-            url: "/emps/add",
+            url: "/emps",
             type: "POST",
             data: JSON.stringify(
                 {
@@ -202,12 +205,14 @@ $(function () {
                     //1.关闭modal框
                     $("#myModal").modal('hide');
                     //2.来到最后一页，显示刚才保存的数据
-                    show_page(currentPage);
+                    console.log(totalPage);
+                    show_page(totalPage);
                 }
             }
         });
     });
 
+    //***************************3.修改员工部分************************************
 
     /**
      * 3.修改员工信息
@@ -231,7 +236,7 @@ $(function () {
     //回显
     function getEmp(empId) {
         $.ajax({
-            url: "/emps/" + empId,
+            url: "/emps/getOne/"+empId,
             type: "GET",
             dataType: "json",
             contentType: "application/json;charset=UTF-8",
@@ -254,10 +259,10 @@ $(function () {
         var deptId = $("#departId_update_div option:selected").val();
 
 
-        //2.3.1 发送ajax请求保存用户
+        //3.1 发送ajax请求保存修改后的用户
         $.ajax({
-            url: "/emps/update",
-            type: "POST",
+            url: "/emps/"+empId,
+            type: "PUT",
             data: JSON.stringify(
                 {
                     empId: empId,
@@ -293,8 +298,8 @@ $(function () {
         $("#delete_confirm").click(function () {
 
             $.ajax({
-                url: "/emps/delete/" + empId,
-                type: "GET",
+                url: "/emps/" + empId,
+                type: "DELETE",
                 dataType: "json",
                 success: function (result) {
                     if (result) {
@@ -309,7 +314,7 @@ $(function () {
     });
 
 
-    //*****************************4.批量删除******************************
+    //*****************************5.批量删除******************************
     //checkbox 表单表头的选择框
     $("#check_all_page").click(function () {
         //根据 check_all_page 的是否被选中,来设置表单中的check_item的选中状态

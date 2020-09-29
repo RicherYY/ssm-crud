@@ -49,11 +49,11 @@
      values (#{empName},#{gender},#{email},#{departId})
   </insert>
 
-  <update id="updateEmpById" parameterType="com.mbkj.entity.Employee">
+  <update id="updateEmpById"  parameterType="com.mbkj.entity.Employee">
     update
         tb_emp
     set
-        emp_name = #{empName},gender = #{gender},email = #{email},dept_id = #{departId}
+        emp_name = #{emp.empName},gender = #{emp.gender},email = #{emp.email},dept_id = #{emp.departId}
     where
         emp_id = #{empId}
   </update>
